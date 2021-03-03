@@ -1,5 +1,41 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoia29sYWhyIiwiYSI6ImNra3p5dGZiYjBtdnEyd3FuaG1sbGk1NmoifQ.alWaywx7j6vE1zvsKS0MQQ';
 
+function arcDraw(origin, dest) { //this will be used to draw individual arcs that connect the investors to the main city onClick
+  var route = {
+    'type': 'FeatureCollection',
+    'features': [
+      {
+        'type': 'Feature',
+        'geometry': {
+          'type': 'LineString',
+          'coordinates': [origin, dest]
+        }
+      }
+    ]
+  };
+
+  // Calculate the distance in kilometers between route start/end point.
+  var lineDistance = turf.length(route.features[0]);
+ 
+  var arc = [];
+ 
+  // Number of steps to use in the arc and animation, more steps means
+  // a smoother arc and animation, but too many steps will result in a
+  // low frame rate
+  var steps = 500;
+ 
+  // Draw an arc between the `origin` & `destination` of the two points
+  for (var i = 0; i < lineDistance; i += lineDistance / steps) {
+    var segment = turf.along(route.features[0], i);
+    arc.push(segment.geometry.coordinates);
+  }
+ 
+  // Update the route with calculated arc coordinates
+  route.features[0].geometry.coordinates = arc;
+
+  return route;
+}
+
 var map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/kolahr/ckl19ggq2094y18tcbn0r9699',
