@@ -53,17 +53,24 @@ map.on('click', function(e) {
     }
   
     var feature = features[0];
+    var connections = new Array();
   
     var popup = new mapboxgl.Popup({ offset: [0, -15] })
       .setLngLat(feature.geometry.coordinates)
       .setHTML('<h3>' + feature.properties.Title + '</h3><p>' + feature.properties[ 'Business Type' ] + '</p><p>' + feature.properties.City + '</p>')
       .addTo(map);
 
-    d3.csv('/Vaporware Cities.csv')
+    d3.csv('/Vaporware Cities Investors.csv')
       .then(function(data) {
         for (var i = 0; i < data.length; i++) {
-            console.log(data[i].Title);
+          console.log("does " + feature.properties.Title + " equal " + data[i].City);
+          if (data[i].City.includes(feature.properties.Title)) {
+            console.log("yes! " + data[i].Title);
+            connections.push(data[i].Title);
+          }
         }
+
+        console.log("array: " + connections);
       })
       .catch(function(error, rows){
         console.log(rows);
