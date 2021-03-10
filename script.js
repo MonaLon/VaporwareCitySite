@@ -66,7 +66,8 @@ map.on('click', function(e) {
           console.log("does " + feature.properties.Title + " equal " + data[i].City);
           if (data[i].City.includes(feature.properties.Title)) {
             console.log("yes! " + data[i].Title);
-            connections.push(data[i].Title);
+            connections.push(data[i].Longitude);
+            connections.push(data[i].Latitude);
           }
         }
 
